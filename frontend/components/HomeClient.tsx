@@ -266,14 +266,16 @@ export default function HomeClient() {
 
                 {/* Main Content */}
                 <main className="w-full md:w-3/4">
-                    <div className="flex justify-between items-center mb-6">
-                        <h1 className="text-2xl font-bold text-gray-800"><span className="text-gray-900">{cars.length} Used Cars</span> in Nagpur for sale!</h1>
-                        <div className="relative">
+                    <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
+                        <h1 className="text-xl md:text-2xl font-bold text-gray-800 leading-tight">
+                            <span className="text-gray-900">{cars.length} Used Cars</span> in Nagpur for sale!
+                        </h1>
+                        <div className="relative w-fit md:w-auto">
                             <select
                                 name="sortBy"
                                 value={filters.sortBy}
                                 onChange={handleFilterChange}
-                                className="appearance-none bg-gray-100 border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-secondary text-sm cursor-pointer"
+                                className="w-fit md:w-auto appearance-none bg-gray-100 border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-secondary text-sm cursor-pointer"
                             >
                                 <option value="newest">Sort By: Newest</option>
                                 <option value="oldest">Sort By: Oldest</option>
