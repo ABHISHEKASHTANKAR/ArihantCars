@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import axios from 'axios';
 import CarCard from '@/components/CarCard';
 import { FaRedo, FaSearch, FaMapMarkerAlt, FaCalendarAlt } from 'react-icons/fa';
@@ -19,7 +19,7 @@ interface Car {
   registrationCity?: string;
 }
 
-export default function Home() {
+function HomeContent() {
   const searchParams = useSearchParams();
   const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(true);
@@ -137,8 +137,6 @@ export default function Home() {
 
   return (
     <div className="bg-gray-100 min-h-screen">
-
-
       <div className="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-6">
 
         {/* Mobile Filter Button */}
@@ -195,7 +193,7 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Brand Filter (Checkboxes) replaced checkboxes */}
+            {/* Brand Filter */}
             <div className="mb-6">
               <label className="text-xs font-bold text-gray-500 uppercase mb-2 block">Brands</label>
               <div className="space-y-2 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
@@ -332,7 +330,15 @@ export default function Home() {
             </>
           )}
         </main>
-      </div >
-    </div >
+      </div>
+    </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={<div className="text-center py-20 text-gray-500">Loading...</div>}>
+      <HomeContent />
+    </Suspense>
   );
 }
