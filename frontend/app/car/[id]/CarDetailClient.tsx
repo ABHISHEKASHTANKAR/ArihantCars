@@ -53,7 +53,8 @@ export default function CarDetailClient({ car: initialCar }: { car: Car }) {
     useEffect(() => {
         const fetchConfig = async () => {
             try {
-                const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/config`);
+                const apiUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000').replace(/\/$/, '');
+                const res = await axios.get(`${apiUrl}/api/config`);
                 setSiteConfig(res.data);
             } catch (error) {
                 console.error('Error fetching config:', error);

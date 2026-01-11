@@ -50,7 +50,8 @@ export default function HomeClient() {
     useEffect(() => {
         const fetchConfig = async () => {
             try {
-                const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/config`);
+                const apiUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000').replace(/\/$/, '');
+                const res = await axios.get(`${apiUrl}/api/config`);
                 setHappyCustomers(res.data.happyCustomers);
             } catch (error) {
                 console.error('Error fetching config:', error);
@@ -91,7 +92,8 @@ export default function HomeClient() {
             if (filters.bodyType) params.append('bodyType', filters.bodyType);
             if (filters.sortBy) params.append('sort', filters.sortBy);
 
-            const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/cars?${params.toString()}`);
+            const apiUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000').replace(/\/$/, '');
+            const res = await axios.get(`${apiUrl}/api/cars?${params.toString()}`);
             setCars(res.data.cars);
             setFacets(res.data.facets?.bodyType || {});
         } catch (error) {

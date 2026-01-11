@@ -58,15 +58,17 @@ export default function AdminPanel() {
             fetchCars();
             fetchConfig();
             // Fetch messages with saved token
-            axios.get(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/contact`, {
-                headers: { 'x-auth-token': savedToken }
+            const apiUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000').replace(/\/$/, '');
+            axios.get(`${apiUrl}/api/contact`, {
+                headers: { Authorization: `Bearer ${savedToken}` }
             }).then(res => setMessages(res.data)).catch(err => console.error(err));
         }
     }, []);
 
     const fetchConfig = async () => {
         try {
-            const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/config`);
+            const apiUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000').replace(/\/$/, '');
+            const res = await axios.get(`${apiUrl}/api/config`);
             setHappyCustomers(res.data.happyCustomers);
             setBusinessDetails({
                 address: res.data.businessAddress || '',
@@ -81,14 +83,15 @@ export default function AdminPanel() {
 
     const updateConfig = async () => {
         try {
-            await axios.put(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/config`, {
+            const apiUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000').replace(/\/$/, '');
+            await axios.put(`${apiUrl}/api/config`, {
                 happyCustomers: Number(happyCustomers),
                 businessAddress: businessDetails.address,
                 businessPhone: businessDetails.phone,
                 businessWhatsapp: businessDetails.whatsapp,
                 businessEmail: businessDetails.email
             }, {
-                headers: { 'x-auth-token': token }
+                headers: { Authorization: `Bearer ${token}` }
             });
             toast.success('Updated successfully');
         } catch (err) {
@@ -98,8 +101,9 @@ export default function AdminPanel() {
 
     const fetchMessages = async () => {
         try {
-            const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/contact`, {
-                headers: { 'x-auth-token': token }
+            const apiUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000').replace(/\/$/, '');
+            const res = await axios.get(`${apiUrl}/api/contact`, {
+                headers: { Authorization: `Bearer ${token}` }
             });
             setMessages(res.data);
         } catch (err) {
@@ -110,8 +114,9 @@ export default function AdminPanel() {
     const handleDeleteMessage = async (id: string) => {
         if (!confirm('Delete this message?')) return;
         try {
-            await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/contact/${id}`, {
-                headers: { 'x-auth-token': token }
+            const apiUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000').replace(/\/$/, '');
+            await axios.delete(`${apiUrl}/api/contact/${id}`, {
+                headers: { Authorization: `Bearer ${token}` }
             });
             toast.success('Message deleted');
             fetchMessages();
@@ -122,8 +127,9 @@ export default function AdminPanel() {
 
     const handleMarkAsRead = async (id: string) => {
         try {
-            await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/api/contact/${id}/read`, {}, {
-                headers: { 'x-auth-token': token }
+            const apiUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000').replace(/\/$/, '');
+            await axios.put(`${apiUrl}/api/contact/${id}/read`, {}, {
+                headers: { Authorization: `Bearer ${token}` }
             });
             fetchMessages();
         } catch (err) {
@@ -133,7 +139,8 @@ export default function AdminPanel() {
 
     const fetchCars = async () => {
         try {
-            const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/cars?limit=100`); // Fetch all for admin
+            const apiUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000').replace(/\/$/, '');
+            const res = await axios.get(`${apiUrl}/api/cars?limit=100`); // Fetch all for admin
             setCars(res.data.cars);
         } catch (err) {
             console.error(err);
@@ -143,15 +150,16 @@ export default function AdminPanel() {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/auth/login`, { username, password });
+            const apiUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000').replace(/\/$/, '');
+            const res = await axios.post(`${apiUrl}/api/auth/login`, { username, password });
             localStorage.setItem('adminToken', res.data.token);
             setToken(res.data.token);
             setIsAuthenticated(true);
             fetchCars();
             fetchConfig();
             // Fetch messages after token is available
-            const messagesRes = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/contact`, {
-                headers: { 'x-auth-token': res.data.token }
+            const messagesRes = await axios.get(`${apiUrl}/api/contact`, {
+                headers: { Authorization: `Bearer ${res.data.token}` }
             });
             setMessages(messagesRes.data);
         } catch (err) {
@@ -168,8 +176,9 @@ export default function AdminPanel() {
     const handleDelete = async (id: string) => {
         if (!confirm('Are you sure?')) return;
         try {
-            await axios.delete(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/cars/${id}`, {
-                headers: { 'x-auth-token': token }
+            const apiUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000').replace(/\/$/, '');
+            await axios.delete(`${apiUrl}/api/cars/${id}`, {
+                headers: { Authorization: `Bearer ${token}` }
             });
             toast.success('Car deleted successfully');
             fetchCars();
@@ -181,7 +190,7 @@ export default function AdminPanel() {
     const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const config = { headers: { 'x-auth-token': token } };
+            const config = { headers: { Authorization: `Bearer ${token}` } };
             const data = new FormData();
             data.append('name', formData.name);
             data.append('brand', formData.brand);
@@ -208,11 +217,16 @@ export default function AdminPanel() {
                 }
             }
 
+            const apiUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000').replace(/\/$/, '');
+            const url = editingCar
+                ? `${apiUrl}/api/cars/${editingCar._id}`
+                : `${apiUrl}/api/cars`;
+
             if (editingCar) {
-                await axios.put(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/cars/${editingCar._id}`, data, config);
+                await axios.put(url, data, config);
                 toast.success('Car updated successfully');
             } else {
-                await axios.post(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/cars`, data, config);
+                await axios.post(url, data, config);
                 toast.success('Car added successfully');
             }
             setShowForm(false);

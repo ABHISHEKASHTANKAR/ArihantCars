@@ -17,7 +17,8 @@ export default function Contact() {
     useEffect(() => {
         const fetchConfig = async () => {
             try {
-                const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/config`);
+                const apiUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000').replace(/\/$/, '');
+                const res = await axios.get(`${apiUrl}/api/config`);
                 setSiteConfig(res.data);
             } catch (error) {
                 console.error('Error fetching config:', error);
@@ -31,7 +32,8 @@ export default function Contact() {
         setLoading(true);
 
         try {
-            await axios.post(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/contact`, formData);
+            const apiUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000').replace(/\/$/, '');
+            await axios.post(`${apiUrl}/api/contact`, formData);
             toast.success('Message sent successfully! We will contact you soon.');
             setFormData({ name: '', phone: '', message: '' });
         } catch (error) {

@@ -8,8 +8,12 @@ interface Props {
 
 async function getCar(id: string) {
     try {
-        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/cars/${id}`);
-        return res.data;
+        const apiUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000').replace(/\/$/, '');
+        const carRes = await fetch(`${apiUrl}/api/cars/${id}`, { next: { revalidate: 3600 } });
+        if (!carRes.ok) {
+            return null;
+        }
+        return carRes.json();
     } catch (error) {
         return null;
     }

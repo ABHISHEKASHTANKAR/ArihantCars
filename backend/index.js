@@ -27,8 +27,8 @@ app.use('/api/', limiter);
 const allowedOrigins = [
     'http://localhost:3000',
     'http://localhost:3001',
-    process.env.FRONTEND_URL // Future production URL
-].filter(Boolean);
+    process.env.FRONTEND_URL
+].filter(Boolean).map(origin => origin.replace(/\/$/, ''));
 
 app.use(cors({
     origin: function (origin, callback) {
