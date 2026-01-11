@@ -2,6 +2,20 @@
 
 ArihantCars is a high-performance, production-ready web application for a premium pre-owned car dealership based in Nagpur. Built with the MERN stack (MongoDB, Express, React/Next.js, Node), it features a dynamic inventory, advanced search/filtering, and a powerful admin panel.
 
+## 📸 Screenshots
+
+![Homepage](./screenshots/homepage.png)
+*Homepage with Advanced Filtering*
+
+![Admin Dashboard](./screenshots/admin.png)
+*Secure Admin Dashboard & Site Configuration*
+
+![Contact Page](./screenshots/contact.png)
+*Dynamic Contact Page with Google Maps Integration*
+
+![About Page](./screenshots/about.png)
+*About ArihantCars*
+
 ## ✨ Key Features
 
 - **🎯 Advanced SEO**: Dynamic metadata, JSON-LD structured data for car snippets, and optimized image alt tags for maximum search visibility in the Nagpur market.
