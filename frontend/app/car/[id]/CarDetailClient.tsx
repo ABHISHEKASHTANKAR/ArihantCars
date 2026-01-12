@@ -71,9 +71,9 @@ export default function CarDetailClient({ car: initialCar }: { car: Car }) {
                 <div className="md:flex">
                     {/* Image Gallery */}
                     <div className="md:w-1/2 p-4">
-                        <div className="h-96 w-full bg-gray-200 rounded-lg mb-4 overflow-hidden flex items-center justify-center">
+                        <div className="h-64 md:h-96 w-full bg-gray-200 rounded-lg mb-4 overflow-hidden flex items-center justify-center">
                             {car.images && car.images.length > 0 ? (
-                                <img src={car.images[activeImage]} alt={`${car.brand} ${car.name}`} className="w-full h-full object-cover" />
+                                <img src={car.images[activeImage]} alt={`${car.brand} ${car.name}`} className="w-full h-full object-contain bg-gray-100" />
                             ) : (
                                 <span className="text-gray-500">No Image</span>
                             )}
@@ -97,13 +97,15 @@ export default function CarDetailClient({ car: initialCar }: { car: Car }) {
                     <div className="md:w-1/2 p-6">
                         <div className="flex justify-between items-start mb-4">
                             <div>
-                                <h1 className="text-3xl font-bold text-gray-800">{car.name}</h1>
-                                <p className="text-gray-600 text-lg flex items-center mt-1">
-                                    <FaMapMarkerAlt className="mr-1" /> {car.registrationCity || 'City N/A'}
+                                <h1 className="text-lg md:text-3xl font-bold text-gray-800 leading-tight">
+                                    {car.name.toLowerCase().includes(car.brand.toLowerCase()) ? car.name : `${car.brand} ${car.name}`}
+                                </h1>
+                                <p className="text-gray-600 text-sm md:text-lg flex items-center mt-1">
+                                    <FaMapMarkerAlt className="mr-1" /> {car.registrationCity || 'Nagpur'}
                                 </p>
                             </div>
                             <div className="text-right">
-                                <p className="text-3xl font-bold text-red-600">₹ {car.price.toLocaleString('en-IN')}</p>
+                                <p className="text-2xl md:text-4xl font-bold text-red-600">₹ {car.price.toLocaleString('en-IN')}</p>
                             </div>
                         </div>
 
@@ -145,7 +147,7 @@ export default function CarDetailClient({ car: initialCar }: { car: Car }) {
 
                         {/* Detailed Specifications */}
                         <h3 className="text-xl font-bold mb-4">Specifications</h3>
-                        <div className="grid grid-cols-2 md:grid-cols-2 gap-x-4 gap-y-2 mb-8 bg-gray-50 p-4 rounded-lg">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-1 mb-8 bg-gray-50 p-4 rounded-lg border border-gray-100">
                             {[
                                 { label: 'Registration Year', value: car.registrationYear },
                                 { label: 'Year of Manufacture', value: car.yearOfManufacture },

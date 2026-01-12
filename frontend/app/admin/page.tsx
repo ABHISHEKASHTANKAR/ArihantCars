@@ -35,6 +35,7 @@ export default function AdminPanel() {
 
     // Collapsible Sections State
     const [expandedSections, setExpandedSections] = useState({
+        config: false,
         basic: true,
         general: false,
         engine: false,
@@ -280,69 +281,85 @@ export default function AdminPanel() {
     }
 
     return (
-        <div className="container mx-auto p-4">
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-                <div className="flex items-center gap-4">
+        <div className="container mx-auto p-4 max-w-7xl">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+                <h1 className="text-2xl md:text-3xl font-bold text-secondary">Admin Dashboard</h1>
+                <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
                     <button
                         onClick={() => setShowInbox(true)}
-                        className="relative bg-primary text-white px-4 py-2 rounded hover:bg-primary-dark flex items-center gap-2"
+                        className="relative bg-primary text-white px-4 py-2.5 rounded-lg hover:bg-primary-dark flex items-center gap-2 transition-all shadow-md active:scale-95 flex-1 md:flex-none justify-center"
                     >
                         <FaEnvelope />
-                        Inbox
+                        <span className="font-bold">Inbox</span>
                         {messages.filter(m => !m.read).length > 0 && (
-                            <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
+                            <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-white">
                                 {messages.filter(m => !m.read).length}
                             </span>
                         )}
                     </button>
-                    <button onClick={handleLogout} className="flex items-center text-red-600 hover:text-red-800"><FaSignOutAlt className="mr-2" /> Logout</button>
+                    <button onClick={handleLogout} className="flex items-center justify-center gap-2 text-red-600 hover:text-red-800 font-bold px-4 py-2 border border-red-100 rounded-lg hover:bg-red-50 transition-all flex-1 md:flex-none">
+                        <FaSignOutAlt /> Logout
+                    </button>
                 </div>
             </div>
 
-            <button onClick={() => { setEditingCar(null); setFormData({ name: '', brand: '', price: '', fuelType: 'Petrol', transmission: 'Manual', kilometers: '', description: '', bodyType: 'Hatchback', mileage: '', arihantCertified: false, registrationYear: '', registrationCity: '', seats: '', rto: '', ownership: '', engineDisplacement: '', engineType: '', yearOfManufacture: '', topSpeed: '', maxPower: '', maxTorque: '', gearbox: '', emissionControl: '', fuelTankCapacity: '', steeringType: '', frontBrakeType: '', rearBrakeType: '', length: '', width: '', height: '', wheelBase: '', kerbWeight: '', grossWeight: '', doors: '' }); setSelectedImages(null); setShowForm(true); }} className="bg-primary text-white px-4 py-2 rounded mb-6 flex items-center hover:bg-primary-dark">
-                <FaPlus className="mr-2" /> Add New Car
-            </button>
+            <div className="flex mb-8">
+                <button onClick={() => { setEditingCar(null); setFormData({ name: '', brand: '', price: '', fuelType: 'Petrol', transmission: 'Manual', kilometers: '', description: '', bodyType: 'Hatchback', mileage: '', arihantCertified: false, registrationYear: '', registrationCity: '', seats: '', rto: '', ownership: '', engineDisplacement: '', engineType: '', yearOfManufacture: '', topSpeed: '', maxPower: '', maxTorque: '', gearbox: '', emissionControl: '', fuelTankCapacity: '', steeringType: '', frontBrakeType: '', rearBrakeType: '', length: '', width: '', height: '', wheelBase: '', kerbWeight: '', grossWeight: '', doors: '' }); setSelectedImages(null); setShowForm(true); }} className="w-full md:w-auto bg-primary text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-primary-dark transition-all font-bold shadow-lg active:scale-95">
+                    <FaPlus /> Add New Car
+                </button>
+            </div>
 
-            <div className="bg-white p-6 rounded shadow-md mb-8">
-                <h2 className="text-xl font-bold mb-6 text-secondary border-b pb-2">Site Configuration</h2>
-                <div className="space-y-6">
-                    {/* Happy Customers */}
-                    <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
-                        <label className="font-bold text-gray-700 min-w-[150px]">Happy Customers:</label>
-                        <input type="number" value={happyCustomers} onChange={(e) => setHappyCustomers(e.target.value)} className="border p-2 rounded flex-1 focus:ring-1 focus:ring-secondary outline-none" />
-                    </div>
+            {/* Site Configuration (Collapsible) */}
+            <div className="bg-white rounded-xl shadow-md mb-8 overflow-hidden border border-gray-100">
+                <button
+                    onClick={() => toggleSection('config')}
+                    className="w-full flex justify-between items-center p-5 bg-gray-50 hover:bg-gray-100 transition-colors border-b border-gray-100"
+                >
+                    <h2 className="text-lg font-bold text-secondary flex items-center gap-2">
+                        Site Configuration
+                    </h2>
+                    {expandedSections.config ? <FaChevronUp className="text-gray-400" /> : <FaChevronDown className="text-gray-400" />}
+                </button>
 
-                    {/* Business Address */}
-                    <div className="flex flex-col md:flex-row md:items-start gap-2 md:gap-4">
-                        <label className="font-bold text-gray-700 min-w-[150px]">Business Address:</label>
-                        <textarea value={businessDetails.address} onChange={(e) => setBusinessDetails({ ...businessDetails, address: e.target.value })} className="border p-2 rounded flex-1 focus:ring-1 focus:ring-secondary outline-none h-20" />
-                    </div>
+                {expandedSections.config && (
+                    <div className="p-6 space-y-6 animate-fadeIn">
+                        {/* Happy Customers */}
+                        <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
+                            <label className="text-sm font-bold text-gray-600 min-w-[150px]">Happy Customers:</label>
+                            <input type="number" value={happyCustomers} onChange={(e) => setHappyCustomers(e.target.value)} className="border p-2.5 rounded-lg flex-1 focus:ring-2 focus:ring-secondary/20 border-gray-200 outline-none transition-all" />
+                        </div>
 
-                    {/* Business Phone */}
-                    <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
-                        <label className="font-bold text-gray-700 min-w-[150px]">Phone Number:</label>
-                        <input type="text" value={businessDetails.phone} onChange={(e) => setBusinessDetails({ ...businessDetails, phone: e.target.value })} className="border p-2 rounded flex-1 focus:ring-1 focus:ring-secondary outline-none" />
-                    </div>
+                        {/* Business Address */}
+                        <div className="flex flex-col md:flex-row md:items-start gap-2 md:gap-4">
+                            <label className="text-sm font-bold text-gray-600 min-w-[150px]">Business Address:</label>
+                            <textarea value={businessDetails.address} onChange={(e) => setBusinessDetails({ ...businessDetails, address: e.target.value })} className="border p-2.5 rounded-lg flex-1 focus:ring-2 focus:ring-secondary/20 border-gray-200 outline-none h-24 transition-all" />
+                        </div>
 
-                    {/* WhatsApp */}
-                    <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
-                        <label className="font-bold text-gray-700 min-w-[150px]">WhatsApp Number:</label>
-                        <input type="text" value={businessDetails.whatsapp} onChange={(e) => setBusinessDetails({ ...businessDetails, whatsapp: e.target.value })} className="border p-2 rounded flex-1 focus:ring-1 focus:ring-secondary outline-none" placeholder="Include country code, e.g. 919876543210" />
-                    </div>
+                        {/* Business Phone */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="flex flex-col gap-2">
+                                <label className="text-sm font-bold text-gray-600">Phone Number:</label>
+                                <input type="text" value={businessDetails.phone} onChange={(e) => setBusinessDetails({ ...businessDetails, phone: e.target.value })} className="border p-2.5 rounded-lg flex-1 focus:ring-2 focus:ring-secondary/20 border-gray-200 outline-none transition-all" />
+                            </div>
+                            <div className="flex flex-col gap-2">
+                                <label className="text-sm font-bold text-gray-600">WhatsApp Number:</label>
+                                <input type="text" value={businessDetails.whatsapp} onChange={(e) => setBusinessDetails({ ...businessDetails, whatsapp: e.target.value })} className="border p-2.5 rounded-lg flex-1 focus:ring-2 focus:ring-secondary/20 border-gray-200 outline-none transition-all" placeholder="Include country code, e.g. 919876543210" />
+                            </div>
+                        </div>
 
-                    {/* Email */}
-                    <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
-                        <label className="font-bold text-gray-700 min-w-[150px]">Contact Email:</label>
-                        <input type="email" value={businessDetails.email} onChange={(e) => setBusinessDetails({ ...businessDetails, email: e.target.value })} className="border p-2 rounded flex-1 focus:ring-1 focus:ring-secondary outline-none" />
-                    </div>
+                        {/* Email */}
+                        <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
+                            <label className="text-sm font-bold text-gray-600 min-w-[150px]">Contact Email:</label>
+                            <input type="email" value={businessDetails.email} onChange={(e) => setBusinessDetails({ ...businessDetails, email: e.target.value })} className="border p-2.5 rounded-lg flex-1 focus:ring-2 focus:ring-secondary/20 border-gray-200 outline-none transition-all" />
+                        </div>
 
-                    <div className="pt-4 flex justify-end">
-                        <button onClick={updateConfig} className="w-full md:w-auto bg-secondary text-white px-8 py-3 rounded-lg hover:bg-black transition-all font-bold shadow-lg active:scale-95">
-                            Save All Changes
-                        </button>
+                        <div className="pt-4 flex justify-end">
+                            <button onClick={updateConfig} className="w-full md:w-auto bg-secondary text-white px-8 py-3 rounded-lg hover:bg-black transition-all font-bold shadow-lg active:scale-95">
+                                Save All Changes
+                            </button>
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
 
             {showForm && (

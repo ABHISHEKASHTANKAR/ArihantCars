@@ -266,8 +266,8 @@ export default function HomeClient() {
 
                 {/* Main Content */}
                 <main className="w-full md:w-3/4">
-                    <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
-                        <h1 className="text-xl md:text-2xl font-bold text-gray-800 leading-tight">
+                    <div className="hidden md:flex flex-row justify-between items-center mb-6">
+                        <h1 className="text-2xl font-bold text-gray-800 leading-tight">
                             <span className="text-gray-900">{cars.length} Used Cars</span> in Nagpur for sale!
                         </h1>
                         <div className="relative w-fit md:w-auto">
