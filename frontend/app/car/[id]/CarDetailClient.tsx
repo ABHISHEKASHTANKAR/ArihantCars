@@ -98,7 +98,9 @@ export default function CarDetailClient({ car: initialCar }: { car: Car }) {
                         <div className="flex justify-between items-start mb-4">
                             <div>
                                 <h1 className="text-lg md:text-3xl font-bold text-gray-800 leading-tight">
-                                    {car.name.toLowerCase().includes(car.brand.toLowerCase()) ? car.name : `${car.brand} ${car.name}`}
+                                    {car.name && car.brand && car.name.toLowerCase().includes(car.brand.toLowerCase())
+                                        ? car.name
+                                        : `${car.brand || ''} ${car.name || ''}`.trim()}
                                 </h1>
                                 <p className="text-gray-600 text-sm md:text-lg flex items-center mt-1">
                                     <FaMapMarkerAlt className="mr-1" /> {car.registrationCity || 'Nagpur'}
